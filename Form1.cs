@@ -1,12 +1,5 @@
-using System;
 using System.Data;
 using System.Data.SqlClient;
-using System.Net;
-using System.Windows.Forms;
-using System.IO;
-using System.Drawing;
-using System.Collections.Generic;
-using System.Reflection;
 
 namespace Søkbar_Database3
 {
@@ -14,14 +7,15 @@ namespace Søkbar_Database3
     {
         SqlConnection connection;
         HttpClient httpClient;
-        //Dictionary<string, string> driverPhotos; # Forsøk på API
+        Dictionary<string, string> driverPhotos;
 
         public Form1()
         {
             InitializeComponent();
             string mdfFilePath = SetDataDirectory(); // Call method to set the data directory and get the MDF file path
             connection = new SqlConnection($@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename={mdfFilePath};Integrated Security=True;");
-
+            httpClient = new HttpClient();
+            driverPhotos = new Dictionary<string, string>();
             AddPredefinedUsers();
             display_data();
         }
@@ -98,13 +92,15 @@ namespace Søkbar_Database3
             }
         }
 
-        /*private void LoadDriverPhotos()
+        // Fetch drivers
+        // Albin why code so messy?
+        private void LoadDriverPhotos()
         {
             driverPhotos.Add("Max Verstappen", "https://www.formula1.com/content/dam/fom-website/drivers/M/MAXVER01_Max_Verstappen/maxver01.png.transform/1col/image.png");
             driverPhotos.Add("Lewis Hamilton", "https://www.formula1.com/content/dam/fom-website/drivers/L/LEWIHAM01_Lewis_Hamilton/lewiham01.png.transform/1col/image.png");
         }
 
-        private void DisplayDriverPhoto(string driverName)
+        private async void DisplayDriverPhoto(string driverName)
         {
             if (!driverPhotos.ContainsKey(driverName))
             {
@@ -116,20 +112,18 @@ namespace Søkbar_Database3
 
             try
             {
-                using (WebClient client = new WebClient())
+                var response = await httpClient.GetAsync(photoUrl);
+                byte[] imageData = await response.Content.ReadAsByteArrayAsync();
+                using (var ms = new MemoryStream(imageData))
                 {
-                    byte[] imageData = client.DownloadData(photoUrl);
-                    using (var ms = new MemoryStream(imageData))
-                    {
-                        pictureBox1.Image = new Bitmap(ms);
-                    }
+                    pictureBox1.Image = new Bitmap(ms);
                 }
             }
             catch (Exception ex)
             {
                 MessageBox.Show("Error ved nedlastning: " + ex.Message);
             }
-        }*/
+        }
 
         private void button1_Click(object sender, EventArgs e)
         {
