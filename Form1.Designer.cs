@@ -1,4 +1,4 @@
-﻿    namespace Søkbar_Database3
+    namespace Søkbar_Database3
 {
     partial class Form1
     {
@@ -38,6 +38,11 @@
             textBox3 = new TextBox();
             textBox4 = new TextBox();
             textBox5 = new TextBox();
+            pictureBox1 = new PictureBox();
+            pictureBox1.Location = new Point(135, 275); // Set the location
+            pictureBox1.Size = new Size(100, 100); // Set the size
+            pictureBox1.SizeMode = PictureBoxSizeMode.StretchImage; // Set the size mode
+            Controls.Add(pictureBox1); // Add the PictureBox to the form's controls
             btnAdd = new Button();
             btnDel = new Button();
             btnUpdate = new Button();
@@ -242,6 +247,7 @@
         private TextBox textBox3;
         private TextBox textBox4;
         private TextBox textBox5;
+        private PictureBox pictureBox1;
         private Button btnAdd;
         private Button btnDel;
         private Button btnUpdate;
